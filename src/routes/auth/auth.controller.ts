@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../models/User';
-import { CustomError } from '../../middleware/globalErrorHandler';
+import { BadRequest, UnauthenticatedError } from '../../middleware/globalErrorHandler';
 import bcrypt from 'bcryptjs';
 // import { createJWT } from '../../utils/jwt';
 import jwt from 'jsonwebtoken';
@@ -15,7 +15,7 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
   const password = req.body.password as unknown as string;
 
   if (!username || !firstname || !lastname || !password) {
-    throw new CustomError(400, `All fields required`);
+    throw new BadRequest(`All fields required`);
   }
   try {
     const user = await userDB.register({ username, firstname, lastname, password });
@@ -44,21 +44,21 @@ const login = async (req: Request, res: Response, next: NextFunction): Promise<v
   const password = req.body.password as unknown as string;
 
   if (!username || !password) {
-    return next(new CustomError(400, 'All fields required'));
+    return next(new BadRequest('All fields required'));
   }
 
   try {
     const user = await userDB.login(username);
 
     if (!user) {
-      return next(new CustomError(400, 'Invalid credential'));
+      return next(new UnauthenticatedError('Invalid credential'));
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     console.log(isPasswordCorrect);
 
     if (!isPasswordCorrect) {
-      return next(new CustomError(400, 'Invalid credential'));
+      return next(new UnauthenticatedError('Invalid credential'));
     }
 
     const usernameJwt = user.username as unknown as string;

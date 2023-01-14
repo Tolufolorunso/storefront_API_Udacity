@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CustomError } from '../../middleware/globalErrorHandler';
+import { BadRequest, NotFound } from '../../middleware/globalErrorHandler';
 import { PRODUCT, Product } from '../../models/Products';
 import { StatusCodes } from 'http-status-codes';
 
@@ -10,8 +10,10 @@ const createProduct = async (req: Request, res: Response, next: NextFunction): P
   const price = req.body.price as unknown as string;
   const category = req.body.category as unknown as string;
 
-  if (!name || !price || !category) {
-    next(new CustomError(400, `All fields required`));
+  const isAllFieldsAvaliable = [name, price].every(Boolean);
+
+  if (!isAllFieldsAvaliable) {
+    return next(new BadRequest(`All fields required`));
   }
 
   try {
@@ -38,7 +40,6 @@ const getAllProducts = async (req: Request, res: Response, next: NextFunction): 
     } else {
       products = await productModel.index();
     }
-    console.log(products);
     res.status(StatusCodes.OK).json({
       status: true,
       message: 'Products fetched successfully',
@@ -55,13 +56,13 @@ const getAllProducts = async (req: Request, res: Response, next: NextFunction): 
 const getOneProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const productId = req.params.productId as unknown as number;
   if (!productId) {
-    return next(new CustomError(400, `Product ${productId} required.`));
+    return next(new BadRequest(`Product ${productId} required.`));
   }
   try {
     const product = await productModel.show(productId);
 
     if (!product) {
-      return next(new CustomError(404, `Product not found. ${productId}`));
+      return next(new NotFound(`Product not found. ${productId}`));
     }
 
     res.status(StatusCodes.OK).json({
@@ -83,7 +84,7 @@ const deleteProduct = async (req: Request, res: Response, next: NextFunction): P
     const isProductExist = await productModel.show(productId);
 
     if (!isProductExist) {
-      return next(new CustomError(404, `Product not found. ${productId}`));
+      return next(new NotFound(`Product not found. ${productId}`));
     }
 
     await productModel.delete(productId);
@@ -92,9 +93,7 @@ const deleteProduct = async (req: Request, res: Response, next: NextFunction): P
       message: 'No content',
     });
   } catch (error) {
-    if (error instanceof Error) {
-      next(new Error('Something went wrong'));
-    }
+    next(error);
   }
 };
 

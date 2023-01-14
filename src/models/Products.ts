@@ -1,5 +1,5 @@
 import Client from '../database';
-import { CustomError } from '../middleware/globalErrorHandler';
+import { BadRequest, CustomError } from '../middleware/globalErrorHandler';
 
 export interface PRODUCT {
   name: string;
@@ -19,9 +19,9 @@ export class Product {
       return rows[0];
     } catch (error) {
       if (error instanceof Error) {
-        throw new CustomError(400, error.message);
+        throw new BadRequest(error.message);
       }
-      throw new CustomError(400, 'something went wrong');
+      throw new CustomError('something went wrong');
     }
   }
   async index(): Promise<PRODUCT[]> {
@@ -33,9 +33,9 @@ export class Product {
       return rows;
     } catch (error) {
       if (error instanceof Error) {
-        throw new CustomError(400, error.message);
+        throw new CustomError(error.message);
       }
-      throw new CustomError(400, 'something went wrong');
+      throw new CustomError('something went wrong');
     }
   }
 
@@ -47,7 +47,7 @@ export class Product {
       connection.release();
       return rows[0];
     } catch (error) {
-      throw new CustomError(400, `Product with id '${id}' cannot be fetched from database: ${error}`);
+      throw new CustomError(`Product with id '${id}' cannot be fetched from database: ${error}`);
     }
   }
 
@@ -59,7 +59,7 @@ export class Product {
       connection.release();
       return rows;
     } catch (error) {
-      throw new CustomError(400, `Database error: ${error}`);
+      throw new CustomError(`Database error: ${error}`);
     }
   }
 
@@ -72,7 +72,7 @@ export class Product {
       console.log(rows);
       return rows[0];
     } catch (error) {
-      throw new CustomError(400, `Database error: ${error}`);
+      throw new CustomError(`Database error: ${error}`);
     }
   }
 }

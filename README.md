@@ -1,8 +1,33 @@
 # Storefront Backend Project
 
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [Features](#features)
+
 ## Getting Started
 
 This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
+
+### Clone
+
+- Clone this repo to your local machine using `https://github.com/....`
+
+### The HTTP verbs used
+
+- GET: To retrive resources
+- POST: TO create resources
+- PATCH: To Update resources
+- DELETE: To delete resources
+
+## Installation
+
+This is node.js API. Installation is done using npm install command:
+
+```javascript
+npm install
+```
 
 ## Required Technologies
 

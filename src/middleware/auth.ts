@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { CustomError } from './globalErrorHandler';
-import { StatusCodes } from 'http-status-codes';
+import { UnauthenticatedError } from './globalErrorHandler';
+// import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 
 interface TokenInterface {
@@ -14,7 +14,7 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
   // console.log(req.headers.authorization)
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    next(new CustomError(StatusCodes.UNAUTHORIZED, 'Invalid authorization'));
+    next(new UnauthenticatedError('Invalid authorization'));
     return;
   }
 
@@ -23,12 +23,14 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
     const decoded = jwt.verify(token, 'secret') as TokenInterface;
     const { username, id } = decoded;
     console.log(username, id);
+
+    console.log(req);
     // req.user = { username, id };
     next();
   } catch (error) {
     if (error instanceof Error) {
       console.log(37, error);
-      next(new CustomError(401, 'Invalid user'));
+      next(new UnauthenticatedError('Invalid user'));
     }
   }
 };

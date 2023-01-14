@@ -8,7 +8,10 @@ import dotenv from 'dotenv';
 // import asyncErrors from 'express-async-errors';
 require('express-async-errors');
 
-import { globalErrorHandler } from './middleware/globalErrorHandler';
+// import { globalErrorHandler } from './middleware/globalErrorHandler';
+import errorHandlerMiddleware from './middleware/error-handler';
+import notFoundHandler from './middleware/notFound';
+// import { NotFound } from './middleware/globalErrorHandler';
 dotenv.config();
 
 const app: express.Application = express();
@@ -23,7 +26,8 @@ app.use(bodyParser.json());
 
 app.use('/api', routes);
 
-app.use(globalErrorHandler);
+app.use(notFoundHandler);
+app.use(errorHandlerMiddleware);
 
 app.listen(3000, function () {
   console.log(`starting app on: ${address}`);

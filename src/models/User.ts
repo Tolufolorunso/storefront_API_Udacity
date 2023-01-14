@@ -1,6 +1,7 @@
+/* eslint-disable no-useless-catch */
 import Client from '../database';
 import bcrypt from 'bcryptjs';
-import { CustomError } from '../middleware/globalErrorHandler';
+import { BadRequest, CustomError } from '../middleware/globalErrorHandler';
 
 export interface AUTH {
   username: string;
@@ -19,17 +20,18 @@ export class User {
       const connection = await Client.connect();
       const data = await connection.query(userExistsSql, [username]);
       if (data.rows.length >= 1) {
-        throw new CustomError(400, `Username is in use`);
+        throw new BadRequest(`Username is in use`);
       }
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       const { rows } = await connection.query(sql, [username, firstname, lastname, hashedPassword]);
+      connection.release();
       return rows[0];
     } catch (error) {
       if (error instanceof Error) {
-        throw new CustomError(400, error.message);
+        throw new BadRequest(error.message);
       }
-      throw new CustomError(400, 'something went wrong');
+      throw new CustomError('something went wrong', 500);
     }
   }
 
@@ -38,13 +40,62 @@ export class User {
       const sql = 'SELECT * FROM users WHERE username=($1)';
       const connection = await Client.connect();
       const { rows } = await connection.query(sql, [username]);
+      connection.release();
       return rows[0];
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new CustomError(400, error.message);
+        throw new CustomError(error.message);
       } else {
-        throw new CustomError(400, 'Something went wrong');
+        throw new CustomError('Something went wrong');
       }
+    }
+  }
+
+  async getUsers(): Promise<AUTH[]> {
+    try {
+      const sql = 'SELECT * FROM users';
+      const connection = await Client.connect();
+      const { rows } = await connection.query(sql);
+      connection.release();
+      return rows;
+    } catch (error: unknown) {
+      throw error;
+    }
+  }
+
+  async getUser(id: number): Promise<AUTH> {
+    try {
+      const sql = 'SELECT * FROM users WHERE id = ($1)';
+      const connection = await Client.connect();
+      const { rows } = await connection.query(sql, [id]);
+      connection.release();
+      return rows[0];
+    } catch (error: unknown) {
+      throw error;
+    }
+  }
+
+  async deleteUser(id: number): Promise<AUTH> {
+    try {
+      const sql = 'DELETE FROM users WHERE id = $1';
+      const connection = await Client.connect();
+      const { rows } = await connection.query(sql, [id]);
+      connection.release();
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateUser(firstname: string, lastname: string, id: number): Promise<AUTH> {
+    try {
+      const sql = 'UPDATE users SET firstname = $1, lastname = $2 WHERE id = $3 RETURNING  *';
+      const connection = await Client.connect();
+      const { rows } = await connection.query(sql, [firstname, lastname, id]);
+      connection.release();
+      return rows[0];
+    } catch (error) {
+      throw error;
     }
   }
 }
