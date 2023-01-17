@@ -49,7 +49,6 @@ const login = async (req: Request, res: Response, next: NextFunction): Promise<v
 
   try {
     const user = await userDB.login(username);
-
     if (!user) {
       return next(new UnauthenticatedError('Invalid credential'));
     }

@@ -60,7 +60,6 @@ const updateUser = async (req: Request, res: Response, next: NextFunction): Prom
     const userID = req.params.userID as unknown as number;
     const firstname = req.body.firstname as unknown as string;
     const lastname = req.body.lastname as unknown as string;
-    console.log(firstname, lastname);
 
     if (![firstname, lastname].every(Boolean)) {
       return next(new NotFound(`all fields required`));

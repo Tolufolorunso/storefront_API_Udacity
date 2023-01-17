@@ -4,15 +4,12 @@
 
 - [Getting Started](#getting-started)
 - [Installation](#installation)
+- [Setup](#setup)
 - [Features](#features)
 
 ## Getting Started
 
 This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
-
-### Clone
-
-- Clone this repo to your local machine using `https://github.com/....`
 
 ### The HTTP verbs used
 
@@ -23,10 +20,28 @@ This repo contains a basic Node and Express app to get you started in constructi
 
 ## Installation
 
+### Clone
+
+- Clone this repo to your local machine using `https://github.com/Tolufolorunso/storefront_API_Udacity.git`
+
 This is node.js API. Installation is done using npm install command:
 
 ```javascript
 npm install
+```
+
+## Setup
+
+1. On your local computer, create a new database, and note the credentials.
+
+## Migrate Database
+
+```javascript
+  // Create a tables with migrations
+  npm run up
+
+  // Drop Tables with migrations
+  npm run down
 ```
 
 ## Required Technologies

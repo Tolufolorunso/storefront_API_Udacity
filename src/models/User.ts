@@ -35,7 +35,7 @@ export class User {
     }
   }
 
-  async login(username: string): Promise<AUTH | null> {
+  async login(username: string): Promise<AUTH> {
     try {
       const sql = 'SELECT * FROM users WHERE username=($1)';
       const connection = await Client.connect();

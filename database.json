@@ -11,7 +11,7 @@
     "driver": "pg",
     "host": "127.0.0.1",
     "post": 5432,
-    "database": "storefront_test",
+    "database": "test_Storefront",
     "user": "store",
     "password": "qwert"
   }

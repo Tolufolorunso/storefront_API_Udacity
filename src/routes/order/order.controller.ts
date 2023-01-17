@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { BadRequest, CustomError } from '../../middleware/globalErrorHandler';
+import { BadRequest } from '../../middleware/globalErrorHandler';
 import { StatusCodes } from 'http-status-codes';
 import Order, { OrderProduct } from '../../models/Order';
 

@@ -22,9 +22,9 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
   try {
     const decoded = jwt.verify(token, 'secret') as TokenInterface;
     const { username, id } = decoded;
-    console.log(username, id);
+    // console.log(username, id);
 
-    console.log(req);
+    // console.log(req);
     // req.user = { username, id };
     next();
   } catch (error) {
