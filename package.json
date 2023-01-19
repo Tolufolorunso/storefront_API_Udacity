@@ -13,8 +13,7 @@
     "build": "npx tsc",
     "tsc": "tsc",
     "up": "db-migrate up",
-    "down": "db-migrate down",
-    "migrate": "db-migrate create storefrond --sql-file",
+    "down": "db-migrate down .",
     "lint": "eslint . --ext .ts",
     "format": "npx prettier --write ."
   },

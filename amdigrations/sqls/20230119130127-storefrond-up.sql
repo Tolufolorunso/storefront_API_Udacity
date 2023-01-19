@@ -7,6 +7,7 @@ CREATE TABLE users (
   UNIQUE(username)
 );
 
+
 CREATE TABLE products (
   id SERIAL NOT NULL PRIMARY KEY,
   name VARCHAR(250) NOT NULL,

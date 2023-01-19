@@ -14,8 +14,6 @@ const createOrder = async (req: Request, res: Response, next: NextFunction): Pro
 
   const canSave: boolean = [userId, products].every(Boolean);
 
-  console.log(userId, products);
-
   if (!canSave) {
     return next(new BadRequest('All fields are required'));
   }

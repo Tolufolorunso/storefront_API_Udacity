@@ -32,7 +32,6 @@ describe('Order Request', () => {
 
     userId = u.id;
     userToken = token;
-    console.log(userId);
   });
 
   it('should create a new order', async () => {

@@ -40,12 +40,20 @@ These are the notes from a meeting with the frontend developer that describe wha
 - price
 - [OPTIONAL] category
 
+```javascript
+ Table: Product (id:SERIAL[PRIMARY KEY], name:VARCHAR(250)[NOT NULL], price:INTEGER[NOT NULL], category:VARCHAR(250))
+```
+
 #### User
 
 - id
 - firstName
 - lastName
 - password
+
+```javascript
+ Table: User (id:SERIAL[PRIMARY KEY],  username:VARCHAR(250)[NOT NULL], firstname:VARCHAR(250)[NOT NULL],  lastname:VARCHAR(250)[NOT NULL], password:VARCHAR(150)[NOT NULL], category:VARCHAR(250))
+```
 
 #### Orders
 
@@ -54,3 +62,21 @@ These are the notes from a meeting with the frontend developer that describe wha
 - quantity of each product in the order
 - user_id
 - status of order (active or complete)
+
+```javascript
+ Table: Order (id:SERIAL[PRIMARY KEY], user_id:INTEGER(foreign key to products table)[NOT NULL], status:BOOLEAN[NOT NULL])
+```
+
+#### Order_Products
+
+- order_id INTEGER REFERENCES orders (id)
+- product_id INTEGER REFERENCES products (id)
+- quantity INTEGER
+
+```javascript
+CREATE TABLE order_products (
+  order_id INTEGER NOT NULL REFERENCES orders (id),
+  product_id INTEGER NOT NULL REFERENCES products (id),
+  quantity INTEGER NOT NULL
+);
+```

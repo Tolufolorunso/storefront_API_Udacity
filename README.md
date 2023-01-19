@@ -53,6 +53,20 @@ npm install
 
 1. create a new .env file, copy the environment variables from .env.example and pastethem into .env file.
 
+```javascript
+ NODE_ENV=dev
+ PORT=3030
+ POSTGRES_HOST=127.0.0.1
+ POSTGRES_PORT=5432
+ POSTGRES_DB=storefront
+ POSTGRES_USER=postgres
+ POSTGRES_PASSWORD=qwert
+ TEST_POSTGRES_DB=test_Storefront
+
+ JWT_SECRET=secret
+JWT_EXPIRES_IN=10d
+```
+
 ## Migrate Database
 
 ```javascript
@@ -66,6 +80,7 @@ npm install
 ## Start the server
 
 ```javascript
+  //start the app on http://127.0.0.1:3000
   npm run dev
 ```
 
