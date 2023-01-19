@@ -80,5 +80,3 @@ describe('User Model functionalities', () => {
     expect(deleteUser).toBeUndefined();
   });
 });
-
-afterAll(async (): Promise<void> => {});
