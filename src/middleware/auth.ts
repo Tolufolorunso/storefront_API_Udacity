@@ -11,8 +11,6 @@ interface TokenInterface {
 const authenticationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
-  // console.log(req.headers.authorization)
-
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     next(new UnauthenticatedError('Invalid authorization'));
     return;
@@ -20,16 +18,12 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
 
   const token = authHeader.split(' ')[1];
   try {
-    const decoded = jwt.verify(token, 'secret') as TokenInterface;
-    const { username, id } = decoded;
-    // console.log(username, id);
-
-    // console.log(req);
+    jwt.verify(token, 'secret') as TokenInterface;
+    // const { username, id } = decoded;
     // req.user = { username, id };
     next();
   } catch (error) {
     if (error instanceof Error) {
-      console.log(37, error);
       next(new UnauthenticatedError('Invalid user'));
     }
   }

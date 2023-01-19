@@ -38,7 +38,6 @@ class Order {
       connection.release();
       return { ...data.rows[0], orderProducts: orderProducts };
     } catch (error) {
-      console.log(41, error);
       throw error;
     }
   }
@@ -65,10 +64,11 @@ class Order {
     }
   }
 
-  async getOneOrder(orderId: number): Promise<OrderExtend> {
+  async show(orderId: number): Promise<OrderExtend> {
     try {
       const sql = 'SELECT * FROM orders WHERE id=$1';
       const connection = await Client.connect();
+
       const { rows } = await connection.query(sql, [orderId]);
       return rows[0];
     } catch (err) {

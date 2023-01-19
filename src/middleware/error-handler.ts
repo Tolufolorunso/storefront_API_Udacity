@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
 const errorHandlerMiddleware = (error: any, req: Request, res: Response, _next: NextFunction) => {
-  console.log(error.code);
+  // console.log(6, error.code);
 
   const customError = {
     status: error.status || StatusCodes.INTERNAL_SERVER_ERROR,
@@ -41,11 +41,11 @@ const errorHandlerMiddleware = (error: any, req: Request, res: Response, _next: 
     // error,
   });
 
-  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-    status: false,
-    message: 'Something went wrong',
-    error,
-  });
+  // return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+  //   status: false,
+  //   message: 'Something went wrong',
+  //   error,
+  // });
 };
 
 export default errorHandlerMiddleware;

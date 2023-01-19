@@ -17,7 +17,7 @@ const createProduct = async (req: Request, res: Response, next: NextFunction): P
   }
 
   try {
-    const product = await productModel.Create({ name, price, category });
+    const product = await productModel.create({ name, price, category });
     res.status(StatusCodes.CREATED).json({
       status: true,
       message: 'Product created successfully',

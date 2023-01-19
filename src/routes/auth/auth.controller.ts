@@ -54,7 +54,6 @@ const login = async (req: Request, res: Response, next: NextFunction): Promise<v
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-    console.log(isPasswordCorrect);
 
     if (!isPasswordCorrect) {
       return next(new UnauthenticatedError('Invalid credential'));

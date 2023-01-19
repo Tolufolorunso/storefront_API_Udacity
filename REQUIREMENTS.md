@@ -6,28 +6,34 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 
-#### Products
+### Products
 
-- Index
-- Show
-- Create [token required]
+- Index: `'/api/products/' [GET]`
+- Show: `'/api/products/:id' [GET]`
+- Create [token required]: `'/api/products/' [POST](token)`
 - [OPTIONAL] Top 5 most popular products
-- [OPTIONAL] Products by category (args: product category)
+- [OPTIONAL] Products by category (args: product category) `'/api/products?category=[category]' [GET]`
+- [ADDED] Delete [token required]: `'/api/products?category=[category]' [GET]`
 
 #### Users
 
-- Index [token required]
-- Show [token required]
-- Create N[token required]
+- Index [token required]: `'/api/users' [GET](token)`
+- Show [token required]: `'/api/users/:userID' [GET](token)`
+- Create N[token required]: `'/api/auth/register' [POST](token)`
+- Login N[token required]: `'/api/auth/login' [POST](token)`
+- Delete N[token required]: `'/api/users/' [POST](token)`
 
 #### Orders
 
-- Current Order by user [args: user id](token required)
+- Current Order by user [args: user id](token required) `'/api/orders/:orderId' [GET](token)`
 - [OPTIONAL] Completed Orders by user [args: user id](token required)
+- [ADDED] Create order [token required]: `'/api/orders' [POST](token)`
+- [ADDED] Get all orders [token required]: `'/api/orders' [GET](token)`
+- [ADDED] Delete order [token required]: `'/api/orders/:orderId' [DELETE](token)`
 
 ## Data Shapes
 
-#### Product
+### Product
 
 - id
 - name

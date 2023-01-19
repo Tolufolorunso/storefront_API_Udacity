@@ -9,7 +9,7 @@ export interface PRODUCT {
 }
 
 export class Product {
-  async Create(product: PRODUCT): Promise<PRODUCT> {
+  async create(product: PRODUCT): Promise<PRODUCT> {
     try {
       const { name, price, category } = product;
       const sql = 'INSERT INTO products (name,price,category) VALUES($1, $2, $3) RETURNING *';
@@ -69,7 +69,6 @@ export class Product {
       const connection = await Client.connect();
       const { rows } = await connection.query(sql, [id]);
       connection.release();
-      console.log(rows);
       return rows[0];
     } catch (error) {
       throw new CustomError(`Database error: ${error}`);

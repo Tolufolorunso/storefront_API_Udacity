@@ -30,9 +30,28 @@ This is node.js API. Installation is done using npm install command:
 npm install
 ```
 
+## Working script
+
+- Start server on production: `npm start`
+- Start server on development: `npm run dev`
+- Start server on development: `npm run dev`
+- Start server on watch: `npm run watch`
+- Build tsc: `npm run build`
+- Run jasmine text: `npm run jasmine`
+- Run test and build: `npm test`
+- Run database migration: `npm run up`
+- Run database migration: `npm run down`
+- Linting: `npm run lint`
+- Format code using prettier: `npm run format`
+
 ## Setup
 
 1. On your local computer, create a new database, and note the credentials.
+2. Create two databases: 1. **storefront** and 2. **test_Storefront** for test.
+
+## Prepare env
+
+1. create a new .env file, copy the environment variables from .env.example and pastethem into .env file.
 
 ## Migrate Database
 
@@ -42,6 +61,18 @@ npm install
 
   // Drop Tables with migrations
   npm run down
+```
+
+## Start the server
+
+```javascript
+  npm run dev
+```
+
+## test
+
+```javascript
+npm test
 ```
 
 ## Required Technologies
