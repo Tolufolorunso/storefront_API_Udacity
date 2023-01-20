@@ -5,7 +5,6 @@
 - [Getting Started](#getting-started)
 - [Installation](#installation)
 - [Setup](#setup)
-- [Features](#features)
 
 ## Getting Started
 
