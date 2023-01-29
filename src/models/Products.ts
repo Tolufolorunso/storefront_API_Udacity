@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import Client from '../database';
 import { BadRequest, CustomError } from '../middleware/globalErrorHandler';
 
@@ -5,23 +6,26 @@ export interface PRODUCT {
   name: string;
   price: string;
   category: string;
+  description?: string;
+  stock?: number;
+  imageUrl?: string;
   id?: number;
 }
 
 export class Product {
   async create(product: PRODUCT): Promise<PRODUCT> {
     try {
-      const { name, price, category } = product;
-      const sql = 'INSERT INTO products (name,price,category) VALUES($1, $2, $3) RETURNING *';
+      const { name, price, category, description, imageUrl, stock } = product;
+      const sql =
+        'INSERT INTO products (name,price,category, description, imageUrl, stock) VALUES($1, $2, $3, $4,$5,$6) RETURNING *';
       const connection = await Client.connect();
-      const { rows } = await connection.query(sql, [name, price, category]);
+      const { rows } = await connection.query(sql, [name, price, category, description, imageUrl, stock]);
+      console.log(rows);
       connection.release();
       return rows[0];
     } catch (error) {
-      if (error instanceof Error) {
-        throw new BadRequest(error.message);
-      }
-      throw new CustomError('something went wrong');
+      // console.log(error);
+      throw error;
     }
   }
   async index(): Promise<PRODUCT[]> {

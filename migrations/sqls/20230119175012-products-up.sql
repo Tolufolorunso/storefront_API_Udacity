@@ -2,5 +2,8 @@ CREATE TABLE products (
   id SERIAL NOT NULL PRIMARY KEY,
   name VARCHAR(250) NOT NULL,
   price INTEGER NOT NULL,
-  category VARCHAR(250)
+  stock INTEGER NOT NULL,
+  category VARCHAR(250),
+  description VARCHAR(250) NOT NULL,
+  imageUrl VARCHAR(250)
 );

@@ -61,5 +61,5 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
   "exclude": ["node_modules", "README.md", "build", "dist", "__tests__", "coverage", "spec"],
-  "include": ["src", "src/express-async-errors.d.ts"]
+  "include": ["src", "src/express-async-errors.d.ts", "src/requestCustom.d.ts"]
 }

@@ -1,23 +1,43 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { BadRequest, NotFound } from '../../middleware/globalErrorHandler';
 import { PRODUCT, Product } from '../../models/Products';
 import { StatusCodes } from 'http-status-codes';
+import { RequestCustom } from '../../requestCustom';
+import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
 
 const productModel = new Product();
 
-const createProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const createProduct = async (req: RequestCustom, res: Response, next: NextFunction): Promise<void> => {
+  const user = req.user;
+  if (user?.role != 'admin') {
+    return next(new BadRequest(`Not authorized to create product`));
+  }
+  const file: any = req.files?.file;
   const name = req.body.name as unknown as string;
   const price = req.body.price as unknown as string;
   const category = req.body.category as unknown as string;
+  const description = req.body.description as unknown as string;
+  const stock = req.body.stock as unknown as number;
 
-  const isAllFieldsAvaliable = [name, price].every(Boolean);
+  const fileId = `${uuidv4()}-${name}`;
+  const filePath = path.join(__dirname, '../../../uploads/' + `${fileId}-${file?.name}`).toLowerCase();
 
+  file.mv(filePath, (err: never) => {
+    if (err) {
+      return next(new BadRequest(`file failed to upload`));
+    }
+  });
+  const imageUrl = `uploads/${fileId}-${file?.name}`.toLowerCase();
+  console.log(imageUrl);
+  const isAllFieldsAvaliable = [name, price, stock, description].every(Boolean);
   if (!isAllFieldsAvaliable) {
     return next(new BadRequest(`All fields required`));
   }
 
   try {
-    const product = await productModel.create({ name, price, category });
+    const product = await productModel.create({ name, price, category, description, stock, imageUrl });
+
     res.status(StatusCodes.CREATED).json({
       status: true,
       message: 'Product created successfully',
@@ -25,12 +45,12 @@ const createProduct = async (req: Request, res: Response, next: NextFunction): P
     });
   } catch (error) {
     if (error instanceof Error) {
-      next(new Error('Something went wrong'));
+      next(error);
     }
   }
 };
 
-const getAllProducts = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const getAllProducts = async (req: RequestCustom, res: Response, next: NextFunction): Promise<void> => {
   try {
     const category = req.query.category as unknown as string;
     let products: PRODUCT[];
@@ -53,7 +73,7 @@ const getAllProducts = async (req: Request, res: Response, next: NextFunction): 
   }
 };
 
-const getOneProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const getOneProduct = async (req: RequestCustom, res: Response, next: NextFunction): Promise<void> => {
   const productId = req.params.productId as unknown as number;
   if (!productId) {
     return next(new BadRequest(`Product ${productId} required.`));
@@ -77,7 +97,7 @@ const getOneProduct = async (req: Request, res: Response, next: NextFunction): P
   }
 };
 
-const deleteProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const deleteProduct = async (req: RequestCustom, res: Response, next: NextFunction): Promise<void> => {
   try {
     const productId = req.params.productId as unknown as number;
 

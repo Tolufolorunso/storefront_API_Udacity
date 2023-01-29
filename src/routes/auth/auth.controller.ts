@@ -8,34 +8,28 @@ import { jwtExpiresIn, jwtSecret } from '../../utils/env';
 
 const userDB = new User();
 
-const registerUser = async (req: Request, res: Response): Promise<void> => {
+const registerUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const username = req.body.username as unknown as string;
   const firstname = req.body.firstname as unknown as string;
   const lastname = req.body.lastname as unknown as string;
+  const role = req.body.role as unknown as string;
   const password = req.body.password as unknown as string;
 
+  console.log(req.body);
+
   if (!username || !firstname || !lastname || !password) {
-    throw new BadRequest(`All fields required`);
+    return next(new BadRequest(`All fields required`));
   }
   try {
-    const user = await userDB.register({ username, firstname, lastname, password });
+    // const user = {};
+    const user = await userDB.register({ username, firstname, lastname, password, role });
     res.status(201).json({
       status: true,
       message: 'Registered successfully',
       user,
     });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      res.status(500).json({
-        status: true,
-        message: `${error.message}`,
-      });
-    } else {
-      res.status(500).json({
-        status: true,
-        message: 'Something went wrong',
-      });
-    }
+    next(error);
   }
 };
 
@@ -68,10 +62,12 @@ const login = async (req: Request, res: Response, next: NextFunction): Promise<v
       expiresIn: JWT_EXPIRES_IN,
     });
 
+    const userData = { ...user, password: undefined };
+
     res.status(200).json({
       status: true,
-      message: 'Registered successfully',
-      user,
+      message: 'Login successfully',
+      user: userData,
       token,
     });
   } catch (error) {

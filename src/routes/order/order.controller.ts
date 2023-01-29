@@ -7,10 +7,10 @@ const orderModel = new Order();
 
 const createOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const userId = req.body.userId as unknown as number;
-  let status = req.body.status as unknown as boolean;
+  const status = req.body.status as unknown as boolean;
   const products = req.body.products as unknown as OrderProduct[];
 
-  status = false;
+  console.log(products);
 
   const canSave: boolean = [userId, products].every(Boolean);
 

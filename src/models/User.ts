@@ -8,6 +8,7 @@ export interface AUTH {
   firstname: string;
   lastname: string;
   password: string;
+  role: string;
   id?: number;
 }
 
@@ -15,23 +16,32 @@ export class User {
   async register(user: AUTH): Promise<AUTH> {
     try {
       const { username, firstname, lastname, password } = user;
+      let { role } = user;
       const userExistsSql = `SELECT username FROM users WHERE username = $1`;
-      const sql = 'INSERT INTO users (username,firstname,lastname,password) VALUES($1, $2, $3, $4) RETURNING *';
+      const sql =
+        'INSERT INTO users (username,firstname,lastname, password,role) VALUES($1, $2, $3, $4, $5) RETURNING *';
+      const countSql = `SELECT COUNT(*) FROM users`;
       const connection = await Client.connect();
       const data = await connection.query(userExistsSql, [username]);
+
       if (data.rows.length >= 1) {
         throw new BadRequest(`Username is in use`);
       }
+
+      const count = await connection.query(countSql);
+      if (count.rows[0].count == 0) {
+        role = 'admin';
+      } else {
+        role = 'user';
+      }
+
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
-      const { rows } = await connection.query(sql, [username, firstname, lastname, hashedPassword]);
+      const { rows } = await connection.query(sql, [username, firstname, lastname, hashedPassword, role]);
       connection.release();
       return rows[0];
     } catch (error) {
-      if (error instanceof Error) {
-        throw new BadRequest(error.message);
-      }
-      throw new CustomError('something went wrong', 500);
+      throw error;
     }
   }
 
